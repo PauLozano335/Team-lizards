@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lizards Games | Brawl Stars Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- VARIABLES Y ESTILOS GLOBALES --- */
+        :root {
+            --bg-dark: #0b0b0d;
+            --card-bg: #16161a;
+            --primary: #a855f7; /* Morado */
+            --secondary: #22c55e; /* Verde Neón */
+            --text-light: #f3f4f6;
+            --accent: #8b5cf6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .logo {
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* --- NAVEGACIÓN --- */
+        nav {
+            background: rgba(11, 11, 13, 0.95);
+            padding: 1rem 5%;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            color: var(--secondary);
+            text-shadow: 0 0 10px var(--secondary);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 20px;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+            text-shadow: 0 0 5px var(--primary);
+        }
+
+        /* --- SECCIONES GENERALES --- */
+        section {
+            padding: 100px 10%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Orbitron', sans-serif;
+            transition: 0.3s;
+            text-decoration: none;
+            margin: 10px;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background: var(--secondary);
+            transform: scale(1.05);
+            box-shadow: 0 0 15px var(--secondary);
+        }
+
+        /* --- INICIO --- */
+        #inicio {
+            text-align: center;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&q=80&w=2070') center/cover;
+        }
+
+        #inicio h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: var(--text-light);
+            text-shadow: 3px 3px var(--primary);
+        }
+
+        /* --- TIENDA --- */
+        .shop-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            width: 100%;
+        }
+
+        .product-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #333;
+            transition: 0.3s;
+        }
+
+        .product-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: contain;
+            margin-bottom: 15px;
+        }
+
+        /* --- MINIJUEGO --- */
+        canvas {
+            background: #222;
+            border: 4px solid var(--primary);
+            display: block;
+            max-width: 100%;
+            box-shadow: 0 0 20px var(--primary);
+        }
+
+        /* --- STATS BRAWL STARS --- */
+        .stats-box {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        input {
+            padding: 10px;
+            width: 80%;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid var(--primary);
+            background: #111;
+            color: white;
+        }
+
+        .progress-container {
+            width: 100%;
+            background: #333;
+            border-radius: 20px;
+            margin-top: 20px;
+            height: 25px;
+            overflow: hidden;
+        }
+
+        #progress-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: 0.5s;
+        }
+
+        /* --- COMUNIDAD (CHAT) --- */
+        .chat-box {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 600px;
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+            border-radius: 15px;
+            border: 1px solid #333;
+        }
+
+        #chat-messages {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .msg {
+            background: #2a2a2e;
+            padding: 8px 15px;
+            border-radius: 10px;
+            max-width: 80%;
+            align-self: flex-start;
+        }
+
+        .msg.user {
+            background: var(--primary);
+            align-self: flex-end;
+        }
+
+        .chat-input-area {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #333;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #000;
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            #inicio h1 { font-size: 2.5rem; }
+            .nav-links { display: none; } /* Simplificado para móvil */
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">Lizards Games</div>
+        <ul class="nav-links">
+            <li><a href="#inicio">Inicio</a></li>
+            <li><a href="#tienda">Tienda</a></li>
+            <li><a href="#juego">Minijuego</a></li>
+            <li><a href="#stats">Stats</a></li>
+            <li><a href="#comunidad">Comunidad</a></li>
+        </ul>
+    </nav>
+
+    <section id="inicio">
+        <h1>Lizards Games</h1>
+        <p>El portal definitivo para los Brawlers de élite. Consigue deals, compite y comparte.</p>
+        <div>
+            <a href="#tienda" class="btn">Ver Tienda</a>
+            <a href="#juego" class="btn">Jugar Ahora</a>
+        </div>
+    </section>
+
+    <section id="tienda">
+        <h2 style="margin-bottom: 40px;">Deals Gamers</h2>
+        <div class="shop-container">
+            <div class="product-card">
+                <img src="https://cdn-icons-png.flaticon.com/512/689/689329.png" alt="Teclado">
+                <h3>Teclado Pro RGB</h3>
+                <p>49.99€</p>
+                <button class="btn" onclick="alert('¡Añadido al carrito!')">Comprar</button>
+            </div>
+            <div class="product-card">
+                <img src="https://cdn-icons-png.flaticon.com/512/3211/3211181.png" alt="Auriculares">
+                <h3>Cascos Lizard</h3>
+                <p>35.00€</p>
+                <button class="btn" onclick="alert('¡Añadido al carrito!')">Comprar</button>
+            </div>
+            <div class="product-card">
+                <img src="https://cdn-icons-png.flaticon.com/512/1067/1067555.png" alt="Gemas">
+                <h3>Gift Card 2000 Gemas</h3>
+                <p>19.99€</p>
+                <button class="btn" onclick="alert('¡Añadido al carrito!')">Comprar</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="juego">
+        <h2 style="margin-bottom: 20px;">Lizard Dash</h2>
+        <p style="margin-bottom: 10px;">Presiona Espacio o Clic para saltar</p>
+        <canvas id="gameCanvas" width="600" height="200"></canvas>
+        <div id="game-info" style="margin-top:10px;">Puntos: <span id="score">0</span></div>
+        <button class="btn" onclick="resetGame()" id="reset-btn" style="display:none;">Reiniciar</button>
+    </section>
+
+    <section id="stats">
+        <h2>Mis Copas Brawl Stars</h2>
+        <div class="stats-box">
+            <p>Introduce tus copas actuales (Meta: 50,000)</p>
+            <input type="number" id="trophy-input" placeholder="Ej: 15000">
+            <button class="btn" onclick="updateStats()">Actualizar</button>
+            <div class="progress-container">
+                <div id="progress-bar"></div>
+            </div>
+            <p id="trophy-display" style="margin-top: 10px;">0 / 50,000 Copas</p>
+        </div>
+    </section>
+
+    <section id="comunidad">
+        <h2 style="margin-bottom: 20px;">Chat de la Comunidad</h2>
+        <div class="chat-box">
+            <div id="chat-messages">
+                </div>
+            <div class="chat-input-area">
+                <input type="text" id="chat-input" placeholder="Escribe un mensaje...">
+                <button class="btn" onclick="sendMessage()" style="margin: 0 0 0 10px;">Enviar</button>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        &copy; 2026 Lizards Games - Hecho para Brawlers
+    </footer>
+
+    <script>
+        /* --- LÓGICA DEL MINIJUEGO --- */
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreEl = document.getElementById('score');
+        const resetBtn = document.getElementById('reset-btn');
+
+        let player = { x: 50, y: 150, w: 30, h: 30, dy: 0, jumpPower: -10, grounded: false };
+        let obstacles = [];
+        let score = 0;
+        let gameActive = true;
+        let gravity = 0.6;
+
+        function drawPlayer() {
+            ctx.fillStyle = '#22c55e';
+            ctx.fillRect(player.x, player.y, player.w, player.h);
+            ctx.strokeStyle = '#fff';
+            ctx.strokeRect(player.x, player.y, player.w, player.h);
+        }
+
+        function createObstacle() {
+            if (Math.random() < 0.02) {
+                obstacles.push({ x: canvas.width, y: 160, w: 20, h: 40 });
+            }
+        }
+
+        function update() {
+            if (!gameActive) return;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Gravedad y Salto
+            player.dy += gravity;
+            player.y += player.dy;
+            if (player.y + player.h > 180) {
+                player.y = 180 - player.h;
+                player.dy = 0;
+                player.grounded = true;
+            }
+
+            drawPlayer();
+
+            // Obstáculos
+            for (let i = obstacles.length - 1; i >= 0; i--) {
+                obstacles[i].x -= 5;
+                ctx.fillStyle = '#a855f7';
+                ctx.fillRect(obstacles[i].x, obstacles[i].y, obstacles[i].w, obstacles[i].h);
+
+                // Colisión
+                if (player.x < obstacles[i].x + obstacles[i].w &&
+                    player.x + player.w > obstacles[i].x &&
+                    player.y < obstacles[i].y + obstacles[i].h &&
+                    player.y + player.h > obstacles[i].y) {
+                    gameOver();
+                }
+
+                if (obstacles[i].x + obstacles[i].w < 0) {
+                    obstacles.splice(i, 1);
+                    score++;
+                    scoreEl.innerText = score;
+                }
+            }
+
+            createObstacle();
+            requestAnimationFrame(update);
+        }
+
+        function gameOver() {
+            gameActive = false;
+            resetBtn.style.display = 'block';
+            alert("¡Game Over! Puntos: " + score);
+        }
+
+        function resetGame() {
+            player.y = 150;
+            obstacles = [];
+            score = 0;
+            scoreEl.innerText = 0;
+            gameActive = true;
+            resetBtn.style.display = 'none';
+            update();
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' && player.grounded) {
+                player.dy = player.jumpPower;
+                player.grounded = false;
+            }
+        });
+        canvas.addEventListener('mousedown', () => {
+            if (player.grounded) {
+                player.dy = player.jumpPower;
+                player.grounded = false;
+            }
+        });
+
+        update();
+
+        /* --- LÓGICA DE ESTADÍSTICAS --- */
+        function updateStats() {
+            const val = document.getElementById('trophy-input').value;
+            const max = 50000;
+            if (val === "") return;
+            
+            localStorage.setItem('lizardTrophiess', val);
+            renderStats(val, max);
+        }
+
+        function renderStats(val, max) {
+            const percent = Math.min((val / max) * 100, 100);
+            document.getElementById('progress-bar').style.width = percent + "%";
+            document.getElementById('trophy-display').innerText = `${Number(val).toLocaleString()} / ${max.toLocaleString()} Copas`;
+        }
+
+        /* --- LÓGICA DE CHAT --- */
+        const chatInput = document.getElementById('chat-input');
+        const chatMessages = document.getElementById('chat-messages');
+
+        function sendMessage() {
+            const text = chatInput.value;
+            if (!text) return;
+
+            const msgs = JSON.parse(localStorage.getItem('lizardChat') || '[]');
+            msgs.push({ text: text, user: true });
+            localStorage.setItem('lizardChat', JSON.stringify(msgs));
+            
+            chatInput.value = '';
+            loadChat();
+        }
+
+        function loadChat() {
+            const msgs = JSON.parse(localStorage.getItem('lizardChat') || '[]');
+            chatMessages.innerHTML = '';
+            msgs.forEach(m => {
+                const div = document.createElement('div');
+                div.className = 'msg ' + (m.user ? 'user' : '');
+                div.innerText = m.text;
+                chatMessages.appendChild(div);
+            });
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        /* --- AL CARGAR LA PÁGINA --- */
+        window.onload = () => {
+            // Cargar Copas
+            const savedTrophies = localStorage.getItem('lizardTrophiess');
+            if (savedTrophies) {
+                renderStats(savedTrophies, 50000);
+                document.getElementById('trophy-input').value = savedTrophies;
+            }
+            // Cargar Chat
+            loadChat();
+        };
+    </script>
+</body>
+</html>
